@@ -32,7 +32,7 @@ use NKF;
 
 BEGIN {
     use lib '@ndtpc_libdir@';
-    $DEFAULT_HOST        = '192.168.10.10';
+    $DEFAULT_HOST        = '127.0.0.1';
     $DEFAULT_PORT        = 2882;
     $DEFAULT_RECURSIVE   = 1;
     $DEFAULT_AUTHNAME    = 'ndtp-client';
