@@ -1,0 +1,49 @@
+dnl Process this file with autoconf to produce a configure script.
+AC_INIT
+
+dnl Checks for programs.
+AC_PROG_INSTALL
+
+AC_SUBST(ndtpc_bindir)
+AC_SUBST(ndtpc_libdir)
+AC_SUBST(ndtpc_tmpdir)
+
+AC_PATH_PROGS(ndtpc_path_mkdir, mkdir, missing_mkdir)
+AC_PATH_PROGS(ndtpc_path_chmod, chmod, missing_chmod)
+AC_PATH_PROGS(ndtpc_path_rm, rm, missing_rm)
+AC_PATH_PROGS(perl_bindir, perl, missing_rm)
+
+dnl Checks for libraries.
+
+dnl Checks for header files.
+
+dnl Checks for typedefs, structures, and compiler characteristics.
+
+dnl dnl Checks for library functions.
+
+AC_MSG_CHECKING(if --with-ndtpc-bindir option is specified)
+AC_ARG_WITH(ndtpc-bindir,
+	[  --with-ndtpc-bindir=DIR       specify ndtpc bindir],
+        [ndtpc_bindir=$withval],
+        [ndtpc_bindir=/usr/local/bin])
+AC_MSG_RESULT(${ndtpc_bindir})
+
+AC_MSG_CHECKING(if --with-ndtpc-libdir option is specified)
+AC_ARG_WITH(ndtpc-libdir,
+	[  --with-ndtpc-libdir=DIR       specify ndtpc libdir],
+        [ndtpc_libdir=$withval],
+        [ndtpc_libdir=/usr/local/lib/ndtpc])
+AC_MSG_RESULT(${ndtpc_libdir})
+
+AC_MSG_CHECKING(if --with-ndtpc-tmpdir option is specified)
+AC_ARG_WITH(ndtpc-tmpdir,
+	[  --with-ndtpc-tmpdir=DIR       specify ndtpc tmpdir],
+        [ndtpc_tmpdir=$withval],
+        [ndtpc_tmpdir=/tmp])
+AC_MSG_RESULT(${ndtpc_tmpdir})
+
+AC_CONFIG_FILES([Makefile:Makefile.in ndtpc:ndtpc.pl])
+AC_CONFIG_COMMANDS([default],[\
+	chmod 555 ndtpc],[])
+AC_OUTPUT
+

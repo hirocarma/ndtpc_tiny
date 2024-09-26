@@ -1,0 +1,43 @@
+SHELL = /bin/sh
+
+prefix= @prefix@
+
+ndtpc_bindir= @ndtpc_bindir@
+ndtpc_libdir= @ndtpc_libdir@
+
+INSTALL= @INSTALL@
+INSTALL_PROGRAM= @INSTALL_PROGRAM@
+INSTALL_DATA= @INSTALL_DATA@
+
+mkdir= @ndtpc_path_mkdir@
+chmod= @ndtpc_path_chmod@
+rm= @ndtpc_path_rm@
+
+PROG= ndtpc
+
+all:
+	@echo everything has been done by configure.
+	@echo you only need to do "make install".
+
+install:: installbin installdata
+
+installbin::
+	[ -d $(ndtpc_bindir) ] || \
+		($(mkdir) -p $(ndtpc_bindir) && $(chmod) 755 $(ndtpc_bindir))
+	for f in $(PROG); do \
+		$(INSTALL) -m 555 $${f} $(ndtpc_bindir)/$${f} ; \
+	done
+
+installdata::
+	[ -d $(ndtpc_libdir) ] || $(mkdir) -p $(ndtpc_libdir)
+	for f in ndtp.pl ; do \
+		$(INSTALL) -m 555 $${f} $(ndtpc_libdir)/$${f} ; \
+	done
+	$(chmod) 755 $(ndtpc_libdir)
+
+clean::
+	$(rm) -f $(PROG)
+
+distclean:: clean
+	$(rm) -f Makefile config.log config.status config.cache
+

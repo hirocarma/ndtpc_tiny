@@ -1,0 +1,101 @@
+● CLIENT->SERVER
+
+SYNOPSIS			DESCRIPTION
+
+L<dictionary name><cr>		辞書の切替え.最初に数字がくるの不可.
+L<dictionary number><cr>	辞書の切替え.
+Q<cr>				終了(接続を切る).
+A<name><cr>			使用許可を得る.
+u<cr>				今使っているユーザのリストを表示する.
+U<cr>				各ユーザの使用中の辞書のリストを表示する
+P<index-type><pattern><cr>	パターンを検索し, ヘッダを得る.
+F<frame>			フレームを転送する(raw-mode).
+S<frame>:<offset><cr>		本文を転送する(cooked-mode).
+I<cr>				目次を転送する.
+v<cr>				サーバのバージョンの問い合わせ
+T<cr>				辞書のリストを表示する
+t<cr>				辞書のリストと各辞書の利用状況を表示する
+
+<dictionary name> ::= kojien | eiwa | waei など
+<index-type> ::= a | A | k | K
+	a ... アルファベット前方
+	A ... アルファベット後方
+	k ... かな前方
+	K ... かな後方
+<frame> ::= <16num>
+<16num> ::= <16dig> | <16num><16dig>
+<offset> ::= <16num>
+<16dig> ::= 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | a | b | c | d | e | f
+<pattern> ::= EUC-code の文字列
+<name> ::= <user-name>@<host-name>[:<tty>]
+
+NOTE:
+A,u,Q,v は, A を一度も実行していなくても使うことができる.
+それ以外のコマンドは, A を実行し, かつ使用許可を得た後でないと使えない.
+
+● SERVER->CLIENT
+
+SYNOPSIS			DESCRIPTION
+
+○ 全般:
+$^<文字列><cr>			サーバの内部エラー. このエラーは回復不能である.
+$?<cr>				コマンドに誤まりがある.
+$N<cr>				使用許可がない.
+$<				辞書が正しくセットされていない
+○ `L'の返事:
+$*				辞書切替え成功.
+$&				辞書切替え失敗.
+○ `A'の返事:
+$A<cr>				使用許可を得るのに成功.
+$N<cr>				使用許可を得るのに失敗(使用許可がない).
+○ `u'の返事:
+$U<cr><users-list><cr>$$<cr>	ユーザの一覧 
+○ `U'の返事:
+$U<cr><users-list><cr>$$<cr>	ユーザの一覧 
+○ `P'の返事:
+$0<cr>{<entry><cr><frame>:<offset><cr>}$$<cr>
+				パターンにマッチした各エントリと, 本文の
+				フレーム,オフセットを返す.
+				<frame>:<offset>を切り出して, Sコマンドに
+				そのまま使うことができる.
+○ `F'の返事:
+$F<2048bytes><cr>		終りに$$は付かない.
+○ `S'の返事:
+$1<cr><body><cr>$$<cr>		bodyには改行が含まれる.
+○ `I'の返事:
+$I<cr>{<index> <frm><cr>}$$<cr>
+				<index>は現在の辞書が使用可能なインデックスを,
+				<frm>はその開始フレームを示す.
+○ `T'の返事:
+$I<cr>{<dict> <dictnameEUC><cr>}$$<cr>
+				<index>は現在の辞書が使用可能なインデックスを,
+				<frm>はその開始フレームを示す.
+○ `t'の返事:
+$I<cr>{<dictnum> <dictnameEUC> <dictname> <user> <userlimit><cr>}$$<cr>
+				<index>は現在の辞書が使用可能なインデックスを,
+				<frm>はその開始フレームを示す.
+
+○ `v'の返事:
+$v<server-version><cr>
+
+
+<frm> ::= <16num>
+<index> ::= HA | OK | ZI | BK | IK | BA | IA | HO 
+	それぞれ 凡例, 奥付け, 条件検索, かな後方, かな, 
+	アルファ後方, アルファ, 本文 に相当
+<entry> ::= <cr> を含まない文字列. 
+<body> ::= <cr> を含まない文字列. ^M^Eは改行, タブに相当.
+<2048bytes> ::= ちょうど2048バイトの(任意の, 8ビット文字の)文字列.
+<cr> ::= ^J
+<users-list> ::= $$のみの行を含まない任意の文字列.
+		<username> <dictnum>:<dictname> <idletime>	
+		 (<users-list>には<cr>が含まれることがある.)
+
+<server-version> ::= $Revision: 1.1.1.1 $ $Date: 1999/07/08 07:05:53 $
+
+
+
+
+
+
+
