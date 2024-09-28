@@ -56,6 +56,8 @@ elsif ( !@booklist ) {
     ( @booklist = NDTP_getbooklist(SO) ) || die "NDTP no books found";
 }
 
+&select;
+
 # the list of the indexes searched.
 %searched = ();
 $reclev   = 0;
@@ -232,4 +234,24 @@ sub init_vars {
     $verbose         = 0;
     $head            = '';
     $word            = '';
+}
+
+sub select {
+    use Term::UI;
+    use Term::ReadLine;
+    if ( !$opt_b ) {
+        &print_booklist;
+        my $term = Term::ReadLine->new("book");
+        my $book_reply =
+          $term->get_reply( prompt => "which book use? (default all)", );
+        if ($book_reply) { @booklist = split( /,/, $book_reply ); }
+    }
+    if ( !$opt_t ) {
+        my $term         = Term::ReadLine->new("search");
+        my $search_reply = $term->get_reply(
+            prompt  => "which search type use? (a or A or j.default a)",
+            default => 'a',
+        );
+        $search_type = $search_reply;
+    }
 }
