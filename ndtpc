@@ -1,4 +1,4 @@
-#!@perl_bindir@
+#!/usr/bin/perl
 # Copyright (C) 1999, 2000 and 2001 Sakane Shoichi (sakane@tanu.org).
 # All rights reserved.
 #
@@ -31,7 +31,7 @@
 use NKF;
 
 BEGIN {
-    use lib '@ndtpc_libdir@';
+    use lib '/usr/local/lib/ndtpc';
     $DEFAULT_HOST        = '127.0.0.1';
     $DEFAULT_PORT        = 2882;
     $DEFAULT_RECURSIVE   = 1;
